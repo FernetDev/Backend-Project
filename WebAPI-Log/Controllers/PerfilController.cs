@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using WebAPI_Log.Context;
 using WebAPI_Log.Entities;
 using WebAPI_Log.Models.DTOs;
+using WebAPI_Log.Services;
 
 
 namespace WebAPI_Log.Controllers
@@ -13,26 +14,17 @@ namespace WebAPI_Log.Controllers
     [ApiController]
     public class PerfilController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public PerfilController(AppDbContext context)
+        private readonly PerfilService _perfilService;
+        public PerfilController(PerfilService perfilService)
         {
-            _context = context;
+            _perfilService = perfilService;
         }
 
         [HttpGet]
         [Route("lista")]
         public async Task<ActionResult<List<PerfilDTO>>> Get()
         {
-            var listaDTO = new List<PerfilDTO>();
-
-            foreach (var item in await _context.Perfiles.ToListAsync()){
-                listaDTO.Add(new PerfilDTO
-                {
-                    IdPerfil = item.IdPerfil,
-                    Nombre = item.Nombre,
-                });
-            }
-            return Ok(listaDTO);
+            return Ok(await _perfilService.lista());
         }
 
     }

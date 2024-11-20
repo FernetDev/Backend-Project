@@ -5,6 +5,7 @@ using System.Text;
 using WebAPI_Log.Custom;
 using WebAPI_Log.Models;
 using WebAPI_Log.Context;
+using WebAPI_Log.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddDbContext<DbpruebaContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSQL"));     
 });
+
+builder.Services.AddScoped<PerfilService>();
 
 builder.Services.AddSingleton<Utilidades>();
 
