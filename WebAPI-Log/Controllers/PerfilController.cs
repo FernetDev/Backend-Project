@@ -24,7 +24,6 @@ namespace WebAPI_Log.Controllers
         public async Task<ActionResult<List<PerfilDTO>>> Get()
         {
             var listaDTO = new List<PerfilDTO>();
-            var listaDB = await ;
 
             foreach (var item in await _context.Perfiles.ToListAsync()){
                 listaDTO.Add(new PerfilDTO
