@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebAPI_Log.Custom;
 using WebAPI_Log.Models;
+using WebAPI_Log.Context;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,6 +50,10 @@ builder.Services.AddCors(options =>
         app.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 });
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSql"))
+);
 
 var app = builder.Build();
 
