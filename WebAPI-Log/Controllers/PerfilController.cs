@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.EntityFrameworkCore;
 using WebAPI_Log.Context;
+using WebAPI_Log.Entities;
 using WebAPI_Log.Models.DTOs;
 
 
@@ -20,10 +21,19 @@ namespace WebAPI_Log.Controllers
 
         [HttpGet]
         [Route("lista")]
-        public async Task<ActionResult> Get()
+        public async Task<ActionResult<List<PerfilDTO>>> Get()
         {
-            var listaPerfil = await _context.Perfiles.ToListAsync();
-            return Ok(listaPerfil);
+            var listaDTO = new List<PerfilDTO>();
+            var listaDB = await ;
+
+            foreach (var item in await _context.Perfiles.ToListAsync()){
+                listaDTO.Add(new PerfilDTO
+                {
+                    IdPerfil = item.IdPerfil,
+                    Nombre = item.Nombre,
+                });
+            }
+            return Ok(listaDTO);
         }
 
     }
