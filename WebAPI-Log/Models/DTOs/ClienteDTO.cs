@@ -4,6 +4,8 @@
     {
         public int IdCliente { get; set; }
         public string? NombreCompleto { get; set; }
+        public string NumeroContacto { get; set; }
+        public DateTime FechaIngreso { get; set; }
         public int IdPerfil { get; set; }
         public string? NombrePerfil { get; set; }
     }

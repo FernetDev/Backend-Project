@@ -64,6 +64,8 @@ namespace WebAPI_Log.Controllers
             var clienteDB = new Cliente
             {
                 NombreCompleto = clienteDTO.NombreCompleto,
+                NumeroContacto = clienteDTO.NumeroContacto,
+                FechaIngreso = clienteDTO.FechaIngreso,
                 IdPerfil = clienteDTO.IdPerfil,  
             };
 
