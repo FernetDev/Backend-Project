@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebAPI_Log.Models;
+namespace WebAPI_Log.Entities;
 
 public partial class Usuario
 {

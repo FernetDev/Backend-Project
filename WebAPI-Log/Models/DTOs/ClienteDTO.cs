@@ -6,5 +6,7 @@
         public string? NombreCompleto { get; set; }
         public int IdPerfil { get; set; }
         public string? NombrePerfil { get; set; }
+
+        public DateTime FechaIngreso { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using WebAPI_Log.Models;
+using WebAPI_Log.Entities;
 
 namespace WebAPI_Log.Custom
 {
