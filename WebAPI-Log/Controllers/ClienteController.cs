@@ -36,6 +36,8 @@ namespace WebAPI_Log.Controllers
                     IdCliente = item.IdCliente,
                     NombreCompleto = item.NombreCompleto,
                     IdPerfil = item.IdPerfil,
+                    Email = item.Email,
+                    ContactNro = item.ContactNro,
                     NombrePerfil = item.PerfilReferencia.Nombre,
                     FechaIngreso = item.FechaIngreso // Asignar FechaIngreso
                 });
