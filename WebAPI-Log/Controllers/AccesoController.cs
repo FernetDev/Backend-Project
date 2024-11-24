@@ -54,9 +54,27 @@ namespace WebAPI_Log.Controllers
                                     ).FirstOrDefaultAsync();  // Cambie a AppDbContext
 
             if (usuarioEncontrado == null)
-                return StatusCode(StatusCodes.Status200OK, new { isSuccess = false, token = "" });
+            {
+                return StatusCode(StatusCodes.Status200OK, new { isSuccess = false, token = "", message = "Usuario o contraseña incorrectos" });
+            }
             else
-                return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, token = _utilidades.generarJWT(usuarioEncontrado) });
+            {
+                // Generar el token
+                var token = _utilidades.generarJWT(usuarioEncontrado);
+
+                // Devolver el token junto con la información del usuario
+                return StatusCode(StatusCodes.Status200OK, new
+                {
+                    isSuccess = true,
+                    token = token,
+                    user = new
+                    {
+                        id = usuarioEncontrado.IdUsuario,
+                        name = usuarioEncontrado.Nombre,
+                        email = usuarioEncontrado.Correo
+                    }
+                });
+            }
         }
 
         // Validación del Token
@@ -68,20 +86,22 @@ namespace WebAPI_Log.Controllers
             return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
         }
 
-        // Nuevo endpoint para obtener el nombre del usuario autenticado
-        [HttpGet]
-        [Authorize]
-        [Route("Me")]
-        public IActionResult ObtenerUsuarioActual()
-        {
-            var usuarioNombre = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;
+        //NO SERIA NECESARIO SI YA EL TOKEN INCLUYE LOS DATOS DE USARIO 
+        
+        //// Nuevo endpoint para obtener el nombre del usuario autenticado
+        //[HttpGet]
+        //[Authorize]
+        //[Route("Me")]
+        //public IActionResult ObtenerUsuarioActual()
+        //{
+        //    var usuarioNombre = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;
 
-            if (string.IsNullOrEmpty(usuarioNombre))
-            {
-                return StatusCode(StatusCodes.Status401Unauthorized, new { message = "Token invalido o ausente" });
-            }
+        //    if (string.IsNullOrEmpty(usuarioNombre))
+        //    {
+        //        return StatusCode(StatusCodes.Status401Unauthorized, new { message = "Token invalido o ausente" });
+        //    }
 
-            return StatusCode(StatusCodes.Status200OK, new { name = usuarioNombre });
-        }
+        //    return StatusCode(StatusCodes.Status200OK, new { name = usuarioNombre });
+        //}
     }
 }
