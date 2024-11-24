@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebAPI_Log.Custom;
-using WebAPI_Log.Models;
 using WebAPI_Log.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using WebAPI_Log.Context;
@@ -67,6 +66,22 @@ namespace WebAPI_Log.Controllers
         {
             bool respuesta = _utilidades.validarToken(token);
             return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
+        }
+
+        // Nuevo endpoint para obtener el nombre del usuario autenticado
+        [HttpGet]
+        [Authorize]
+        [Route("Me")]
+        public IActionResult ObtenerUsuarioActual() 
+        {
+            var usuarioNombre = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;
+
+            if (string.IsNullOrEmpty(usuarioNombre))
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, new { message = "Token invalido o ausente" });
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new { name = usuarioNombre });
         }
     }
 }
