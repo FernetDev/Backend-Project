@@ -41,7 +41,8 @@ namespace WebAPI_Log.Custom
             var userClaims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, modelo.IdUsuario.ToString()),
-                new Claim(ClaimTypes.Email, modelo.Correo!)
+                new Claim(ClaimTypes.Email, modelo.Correo!),
+                new Claim(ClaimTypes.Name, modelo.Nombre!) // Agregar el nombre del usuario
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
