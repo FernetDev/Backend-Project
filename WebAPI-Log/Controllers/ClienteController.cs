@@ -36,10 +36,10 @@ namespace WebAPI_Log.Controllers
                     IdCliente = item.IdCliente,
                     NombreCompleto = item.NombreCompleto,
                     IdPerfil = item.IdPerfil,
+                    NombrePerfil = item.PerfilReferencia.Nombre,
+                    FechaIngreso = item.FechaIngreso,
                     Email = item.Email,
                     ContactNro = item.ContactNro,
-                    NombrePerfil = item.PerfilReferencia.Nombre,
-                    FechaIngreso = item.FechaIngreso // Asignar FechaIngreso
                 });
             }
 
@@ -69,19 +69,26 @@ namespace WebAPI_Log.Controllers
         [Route("guardar")]
         public async Task<ActionResult<ClienteDTO>> Guardar(ClienteDTO clienteDTO)
         {
-            var clienteDB = new Cliente
+            try
             {
-                NombreCompleto = clienteDTO.NombreCompleto,
-                IdPerfil = clienteDTO.IdPerfil,
-                FechaIngreso = clienteDTO.FechaIngreso,
-                Email = clienteDTO.Email,
-                ContactNro = clienteDTO.ContactNro,
-            };
+                var clienteDB = new Cliente
+                {
+                    NombreCompleto = clienteDTO.NombreCompleto,
+                    IdPerfil = clienteDTO.IdPerfil,
+                    FechaIngreso = clienteDTO.FechaIngreso,
+                    Email = clienteDTO.Email,
+                    ContactNro = clienteDTO.ContactNro
+                };
 
-            await _context.Clientes.AddAsync(clienteDB);
-            await _context.SaveChangesAsync();
+                await _context.Clientes.AddAsync(clienteDB);
+                await _context.SaveChangesAsync();
 
-            return Ok("Cliente agregado");
+                return Ok("Cliente agregado");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al guardar el cliente: {ex.Message}");
+            }
         }
 
         // Editar cliente
