@@ -72,9 +72,8 @@ namespace WebAPI_Log.Controllers
                 NombreCompleto = clienteDTO.NombreCompleto,
                 IdPerfil = clienteDTO.IdPerfil,
                 FechaIngreso = clienteDTO.FechaIngreso,
+                Email = clienteDTO.Email,
                 ContactNro = clienteDTO.ContactNro,
-                Email = clienteDTO.Email
-                // Asignar la fecha de ingreso
             };
 
             await _context.Clientes.AddAsync(clienteDB);
