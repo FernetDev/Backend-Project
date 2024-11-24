@@ -72,7 +72,7 @@ namespace WebAPI_Log.Controllers
         [HttpGet]
         [Authorize]
         [Route("Me")]
-        public IActionResult ObtenerUsuarioActual() 
+        public IActionResult ObtenerUsuarioActual()
         {
             var usuarioNombre = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;
 
