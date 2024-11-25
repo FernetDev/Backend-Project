@@ -40,6 +40,9 @@ namespace WebAPI_Log.Controllers
                     FechaIngreso = item.FechaIngreso,
                     Email = item.Email,
                     ContactNro = item.ContactNro,
+                    EstaPagada = item.EstaPagada,
+                    FechaPago = item.FechaPago,
+                    FechaVencimiento = item.FechaVencimiento
                 });
             }
 
@@ -59,7 +62,12 @@ namespace WebAPI_Log.Controllers
             clienteDTO.NombreCompleto = clienteDB.NombreCompleto;
             clienteDTO.IdPerfil = clienteDB.IdPerfil;
             clienteDTO.NombrePerfil = clienteDB.PerfilReferencia.Nombre;
-            clienteDTO.FechaIngreso = clienteDB.FechaIngreso; // Asignar FechaIngreso
+            clienteDTO.FechaIngreso = clienteDB.FechaIngreso; 
+            clienteDTO.Email = clienteDB.Email;
+            clienteDTO.ContactNro = clienteDB.ContactNro;
+            clienteDTO.EstaPagada = clienteDB.EstaPagada; 
+            clienteDTO.FechaPago = clienteDB.FechaPago; 
+            clienteDTO.FechaVencimiento = clienteDB.FechaVencimiento; 
 
             return Ok(clienteDTO);
         }
@@ -77,7 +85,10 @@ namespace WebAPI_Log.Controllers
                     IdPerfil = clienteDTO.IdPerfil,
                     FechaIngreso = clienteDTO.FechaIngreso,
                     Email = clienteDTO.Email,
-                    ContactNro = clienteDTO.ContactNro
+                    ContactNro = clienteDTO.ContactNro,
+                    EstaPagada = clienteDTO.EstaPagada, 
+                    FechaPago = clienteDTO.FechaPago, 
+                    FechaVencimiento = clienteDTO.FechaVencimiento
                 };
 
                 await _context.Clientes.AddAsync(clienteDB);
@@ -106,6 +117,9 @@ namespace WebAPI_Log.Controllers
 
             clienteDB.NombreCompleto = clienteDTO.NombreCompleto;
             clienteDB.IdPerfil = clienteDTO.IdPerfil;
+            clienteDB.EstaPagada = clienteDTO.EstaPagada; 
+            clienteDB.FechaPago = clienteDTO.FechaPago; 
+            clienteDB.FechaVencimiento = clienteDTO.FechaVencimiento;
 
             _context.Clientes.Update(clienteDB);
             await _context.SaveChangesAsync();

@@ -86,22 +86,5 @@ namespace WebAPI_Log.Controllers
             return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
         }
 
-        //NO SERIA NECESARIO SI YA EL TOKEN INCLUYE LOS DATOS DE USARIO 
-        
-        //// Nuevo endpoint para obtener el nombre del usuario autenticado
-        //[HttpGet]
-        //[Authorize]
-        //[Route("Me")]
-        //public IActionResult ObtenerUsuarioActual()
-        //{
-        //    var usuarioNombre = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;
-
-        //    if (string.IsNullOrEmpty(usuarioNombre))
-        //    {
-        //        return StatusCode(StatusCodes.Status401Unauthorized, new { message = "Token invalido o ausente" });
-        //    }
-
-        //    return StatusCode(StatusCodes.Status200OK, new { name = usuarioNombre });
-        //}
     }
 }
