@@ -36,7 +36,6 @@ namespace WebAPI_Log.Controllers
                     IdCliente = item.IdCliente,
                     NombreCompleto = item.NombreCompleto,
                     IdPerfil = item.IdPerfil,
-                    NombrePerfil = item.PerfilReferencia.Nombre,
                     FechaIngreso = item.FechaIngreso,
                     Email = item.Email,
                     ContactNro = item.ContactNro,
@@ -61,7 +60,6 @@ namespace WebAPI_Log.Controllers
             clienteDTO.IdCliente = id;
             clienteDTO.NombreCompleto = clienteDB.NombreCompleto;
             clienteDTO.IdPerfil = clienteDB.IdPerfil;
-            clienteDTO.NombrePerfil = clienteDB.PerfilReferencia.Nombre;
             clienteDTO.FechaIngreso = clienteDB.FechaIngreso; 
             clienteDTO.Email = clienteDB.Email;
             clienteDTO.ContactNro = clienteDB.ContactNro;
