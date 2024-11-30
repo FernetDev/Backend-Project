@@ -10,6 +10,26 @@ using WebAPI_Log.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configura CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVercel", policy =>
+    {
+        policy.WithOrigins("https://3am-test.vercel.app/") // Reemplaza con tu dominio
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // Si usas cookies o autenticación
+    });
+});
+
+builder.Services.AddControllers();
+var app = builder.Build();
+
+// Usa la política de CORS
+app.UseCors("AllowVercel");
+app.UseAuthorization();
+app.MapControllers();
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -58,7 +78,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSql"))
 );
 
-var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
