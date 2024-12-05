@@ -10,15 +10,20 @@ namespace WebAPI_Log.Custom
     public class Utilidades
     {
         private readonly IConfiguration _configuration;
+
         public Utilidades(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-
-
+        // Metodo para encriptar el texto con SHA-256
         public string EncriptarSHA256(string texto)
         {
+            if (string.IsNullOrEmpty(texto))
+            {
+                throw new ArgumentException("El texto no puede ser nulo o vacío.", nameof(texto));
+            }
+
             using (SHA256 sha256Hash = SHA256.Create())
             {
                 //Computar el Hash
@@ -26,23 +31,29 @@ namespace WebAPI_Log.Custom
 
                 //Convertir el array de Bits a String 
                 StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++) 
+                foreach (byte byteValue in bytes)
                 {
-                    builder.Append(bytes[i].ToString("X2"));
+                    builder.Append(byteValue.ToString("X2"));
                 }
 
                 return builder.ToString();
             }
         }
 
+        // Metodo para generar el JWT
         public string generarJWT(Usuario modelo)
         {
+            if (modelo == null)
+            {
+                throw new ArgumentNullException(nameof(modelo), "El modelo de usuario no puede ser nulo.");
+            }
+
             // Crear la informacion del usuario para el token
             var userClaims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, modelo.IdUsuario.ToString()),
                 new Claim(ClaimTypes.Email, modelo.Correo ?? string.Empty),
-                new Claim(ClaimTypes.Name, modelo.Nombre ?? string.Empty) 
+                new Claim(ClaimTypes.Name, modelo.Nombre ?? string.Empty)
             };
 
             var key = _configuration["Jwt:Key"];
@@ -58,18 +69,18 @@ namespace WebAPI_Log.Custom
             var expires = DateTime.UtcNow.AddMinutes(expiryMinutes);
 
             // Crear detalle del token
-            var jwlConfig = new JwtSecurityToken(
+            var jwtConfig = new JwtSecurityToken(
                 claims: userClaims,
                 expires: expires,
                 signingCredentials: credentials
             );
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            return tokenHandler.WriteToken(jwlConfig);
+            return tokenHandler.WriteToken(jwtConfig);
         }
 
         // Metodo para Validacion del token
-        public bool validarToken(string token)
+        public bool ValidarToken(string token)
         {
             if (string.IsNullOrEmpty(token))
             {
@@ -95,10 +106,10 @@ namespace WebAPI_Log.Custom
                 // Si la validación es exitosa, retorna true
                 return validatedToken != null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Registrar el error (si es necesario)
-                // Log.Error("Error al validar el token: " + ex.Message);
+                // Log.Error("Error al validar el token.");
                 return false;
             }
         }
