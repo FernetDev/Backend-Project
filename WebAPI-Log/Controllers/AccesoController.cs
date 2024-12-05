@@ -82,7 +82,7 @@ namespace WebAPI_Log.Controllers
         [Route("ValidarToken")]
         public IActionResult ValidarToken([FromQuery] string token)
         {
-            bool respuesta = _utilidades.validarToken(token);
+            bool respuesta = _utilidades.ValidarToken(token);
             return StatusCode(StatusCodes.Status200OK, new { isSuccess = respuesta });
         }
 
