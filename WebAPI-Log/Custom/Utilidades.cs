@@ -37,25 +37,35 @@ namespace WebAPI_Log.Custom
 
         public string generarJWT(Usuario modelo)
         {
-            //crear la informacion del usuario para el token
+            // Crear la informacion del usuario para el token
             var userClaims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, modelo.IdUsuario.ToString()),
-                new Claim(ClaimTypes.Email, modelo.Correo!),
-                new Claim(ClaimTypes.Name, modelo.Nombre!) // Agregar el nombre del usuario
+                new Claim(ClaimTypes.Email, modelo.Correo ?? string.Empty),
+                new Claim(ClaimTypes.Name, modelo.Nombre ?? string.Empty) 
             };
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+            var key = _configuration["Jwt:Key"];
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new InvalidOperationException("La clave de JWT no está configurada.");
+            }
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
-            //Crear detalle del token
+            var expiryMinutes = Convert.ToDouble(_configuration["Jwt:ExpiryMinutes"] ?? "30");
+            var expires = DateTime.UtcNow.AddMinutes(expiryMinutes);
+
+            // Crear detalle del token
             var jwlConfig = new JwtSecurityToken(
                 claims: userClaims,
-                expires: DateTime.UtcNow.AddMinutes(30), //aumente el tiempo
+                expires: expires,
                 signingCredentials: credentials
-                );
+            );
 
-            return new JwtSecurityTokenHandler().WriteToken(jwlConfig);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            return tokenHandler.WriteToken(jwlConfig);
         }
 
         // Metodo para Validacion del token
@@ -79,15 +89,16 @@ namespace WebAPI_Log.Custom
 
             try
             {
-                // Intenta validar el token
+                // Intentar validar el token
                 var claimsPrincipal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
 
-                // Si la validacion es exitosa, retorna true
+                // Si la validación es exitosa, retorna true
                 return validatedToken != null;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Si ocurre una excepción durante la validacion, retorna false
+                // Registrar el error (si es necesario)
+                // Log.Error("Error al validar el token: " + ex.Message);
                 return false;
             }
         }
