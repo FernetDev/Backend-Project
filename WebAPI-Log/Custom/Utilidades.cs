@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -10,10 +11,12 @@ namespace WebAPI_Log.Custom
     public class Utilidades
     {
         private readonly IConfiguration _configuration;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public Utilidades(IConfiguration configuration)
+        public Utilidades(IConfiguration configuration, UserManager<ApplicationUser> userManager)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _userManager = userManager;
         }
 
         // Metodo para encriptar el texto con SHA-256
@@ -41,7 +44,7 @@ namespace WebAPI_Log.Custom
         }
 
         // Metodo para generar el JWT
-        public string generarJWT(Usuario modelo)
+        public async Task<string> generarJWT(ApplicationUser modelo)
         {
             if (modelo == null)
             {
@@ -51,10 +54,16 @@ namespace WebAPI_Log.Custom
             // Crear la informacion del usuario para el token
             var userClaims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, modelo.IdUsuario.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, modelo.Id.ToString()),
                 new Claim(ClaimTypes.Email, modelo.Correo ?? string.Empty),
                 new Claim(ClaimTypes.Name, modelo.Nombre ?? string.Empty)
             };
+
+            //Get roles
+            var roles = await _userManager.GetRolesAsync(modelo);
+
+            //Add roles to claims
+            var userAndRolesClaims = userClaims.Union(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var key = _configuration["Jwt:Key"];
             if (string.IsNullOrEmpty(key))
@@ -70,7 +79,7 @@ namespace WebAPI_Log.Custom
 
             // Crear detalle del token
             var jwtConfig = new JwtSecurityToken(
-                claims: userClaims,
+                claims: userAndRolesClaims,
                 expires: expires,
                 signingCredentials: credentials
             );

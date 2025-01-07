@@ -8,9 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI_Log.Controllers
 {
+    [Authorize(Roles = "ADMIN, MANAGER, COACH")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClienteController : ControllerBase

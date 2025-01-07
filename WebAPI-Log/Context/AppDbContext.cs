@@ -1,17 +1,19 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebAPI_Log.Entities;
 
 namespace WebAPI_Log.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         // DbSet para las entidades
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Perfil> Perfiles { get; set; }
+        public virtual DbSet<Cliente> Clientes { get; set; }
+        public virtual DbSet<Perfil> Perfiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
