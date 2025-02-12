@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI_Log.Controllers
 {
-    [Authorize(Roles = "ADMIN, MANAGER, COACH")]
+    //[Authorize(Roles = "ADMIN, MANAGER, COACH")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClienteController : ControllerBase

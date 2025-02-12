@@ -29,7 +29,7 @@ namespace WebAPI_Log.Controllers
             _signInManager = signInManager;
         }
 
-        [Authorize(Roles = "ADMIN, MANAGER")]
+        //[Authorize(Roles = "ADMIN, MANAGER")]
         [HttpPost]
         [Route("Registrarse")]
         public async Task<IActionResult> Registrarse(UsuarioDTO objeto)
@@ -56,7 +56,7 @@ namespace WebAPI_Log.Controllers
                 return StatusCode(StatusCodes.Status200OK, new { isSuccess = false });
         }
 
-        [Authorize(Roles = "ADMIN, MANAGER, COACH")]
+        //[Authorize(Roles = "ADMIN, MANAGER, COACH")]
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login(LoginDTO objeto)

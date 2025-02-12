@@ -77,10 +77,10 @@ void ConfigureCors(IServiceCollection services)
     {
         options.AddPolicy("AllowVercel", policy =>
         {
-            policy.WithOrigins("https://3am-test.vercel.app/") 
+            policy.AllowAnyOrigin()//.WithOrigins("https://3am-test.vercel.app/") 
                   .AllowAnyHeader()
-                  .AllowAnyMethod()
-                  .AllowCredentials(); 
+                  .AllowAnyMethod();
+                  //.AllowCredentials(); 
         });
     });
 }
